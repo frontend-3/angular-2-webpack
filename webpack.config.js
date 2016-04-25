@@ -3,8 +3,16 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const proxy = require('./server/webpack-dev-proxy');
 const styleLintPlugin = require('stylelint-webpack-plugin');
+const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+
+const metadata = {
+  title: 'Angular2 Webpack Starter',
+  baseUrl: '/',
+  host: 'localhost',
+  port: 3000,
+  ENV: ENV
+};
 
 const loaders = require('./webpack/loaders');
 
@@ -18,7 +26,7 @@ const basePlugins = [
   new HtmlWebpackPlugin({
     template: './src/index.html',
     inject: 'body',
-    minify: false
+    minify: true
   })
 ];
 
@@ -48,13 +56,13 @@ const plugins = basePlugins
   .concat(process.env.NODE_ENV === 'development' ? devPlugins : []);
 
 module.exports = {
+  metadata: metadata,
   entry: {
     app: './src/boot.ts',
     vendor: [
       'es5-shim',
       'es6-shim',
       'es6-promise',
-      './shims/shims_for_IE',
       'angular2/bundles/angular2-polyfills',
       'angular2/platform/browser',
       'angular2/platform/common_dom',
@@ -81,8 +89,10 @@ module.exports = {
   plugins: plugins,
 
   devServer: {
-    historyApiFallback: { index: '/' },
-    proxy: proxy(),
+    port: metadata.port,
+    host: metadata.host,
+    historyApiFallback: true,
+    watchOptions: { aggregateTimeout: 300, poll: 1000 }
   },
 
   module: {
