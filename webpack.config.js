@@ -4,7 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const styleLintPlugin = require('stylelint-webpack-plugin');
-const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+var ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 
 const metadata = {
   title: 'Angular2 Webpack Starter',
@@ -25,8 +25,7 @@ const basePlugins = [
   new webpack.optimize.CommonsChunkPlugin('vendor', '[name].[hash].bundle.js'),
   new HtmlWebpackPlugin({
     template: './src/index.html',
-    inject: 'body',
-    minify: true
+    title: 'test'
   })
 ];
 
@@ -63,6 +62,7 @@ module.exports = {
       'es5-shim',
       'es6-shim',
       'es6-promise',
+      './shims/shims_for_IE',
       'angular2/bundles/angular2-polyfills',
       'angular2/platform/browser',
       'angular2/platform/common_dom',
