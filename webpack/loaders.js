@@ -1,4 +1,5 @@
 'use strict';
+const helpers = require('./helpers');
 
 exports.tslint = {
   test: /\.ts$/,
@@ -6,27 +7,27 @@ exports.tslint = {
   exclude: /node_modules/
 };
 
-exports.tsTest = loadTs('ts', true);
-exports.ts = loadTs();
-
-function loadTs (loader, inTest) {
-  return {
-    test: /\.ts$/,
-    loader: loader || 'ts',
-    exclude: inTest ? /node_modules/ : /(node_modules\/|\.test\.ts$|tests\.\w+\.ts$)/
-  };
-}
+exports.ts = {
+  test: /\.ts$/,
+  loader: 'awesome-typescript-loader',
+  exclude: [/\.(spec|e2e)\.ts$/]
+};
 
 exports.html = {
   test: /\.html$/,
   loader: 'raw',
-  exclude: /node_modules/
+  exclude: [helpers.root('src/index.html')]
 };
 
 exports.css = {
   test: /\.css$/,
   loader: 'raw-loader',
   exclude: /node_modules/
+};
+
+exports.json = {
+  test: /\.json$/,
+  loader: 'json-loader'
 };
 
 exports.svg = makeUrlLoader(/\.svg$/);
